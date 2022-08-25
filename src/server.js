@@ -10,3 +10,5 @@ app.get('/', (_request, response) => {
 });
 
 app.listen(port, () => console.log('ouvindo porta', port));
+
+// ficará responsável por iniciar sua API
