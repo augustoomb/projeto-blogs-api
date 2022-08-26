@@ -1,4 +1,4 @@
-// const { BlogPost } = require('../database/models');
+const { BlogPost } = require('../database/models');
 
 const blogPostValidations = require('../helpers/blogPostValidations');
 
@@ -31,4 +31,16 @@ const checkPostsInfo = (title, content, categoryIds) => {
 //   return user;
 // };
 
-module.exports = { checkPostsInfo };
+const create = async (title, content, userId) => {
+  const published = new Date();
+  const updated = new Date();
+  const result = await BlogPost.create({ title, content, userId, published, updated });
+
+  if (!result) {
+    return mountObjError(500, 'Não foi possível criar usuário');
+  }
+
+  return result;
+};
+
+module.exports = { checkPostsInfo, create };

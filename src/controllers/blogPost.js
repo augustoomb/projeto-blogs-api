@@ -15,8 +15,22 @@ const create = async (req, res, next) => {
   if (allIdsInDb.error) return next(allIdsInDb.error);
   // return res.status(200).json(allIdsInDb);
 
-  // DESCOBRINDO ID DO USUÁRIO LOGADO (não preciso checar. Se chegou aqui tem token valido)
+  // DESCOBRINDO ID DO USUÁRIO LOGADO (não preciso checar. Se chegou aqui tem token válido)
   const { id } = await userServices.getIdByEmail(email); // ID USUÁRIO LOGADO
+
+  // SALVAR NA TABLE blogposts title, content + userId QUE PEGUEI NO auth (middleware)
+  const createdPost = await blogPostServices.create(title, content, id);
+  if (createdPost.error) return next(createdPost.error);
+
+  return res.status(201).json(createdPost);
 };
 
 module.exports = { create };
+
+// (FEITO) LANÇAR title, content passados no body + userId que peguei no auth, na table blogPost
+
+// Pegar o id da ultima ação (idPost)
+
+// Pegar cada CategoryId passado por param
+
+// lançar os 2 últimos na table postCategories
