@@ -1,14 +1,14 @@
 const userService = require('../services/userServices');
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  try {
-    const result = await userService.login(email, password);
-    res.status(200).json(result);
-  } catch (error) {
-    return res.status(500).json({ message: 'ERROR_500' }); 
-  }   
+  const checkUser = await userService.userIsValid(email, password);
+  if (checkUser.error) return next(checkUser.error);
+
+  const token = await userService.login(email, password);
+
+  return res.status(200).json({ token });
 };
 
 module.exports = { login };
