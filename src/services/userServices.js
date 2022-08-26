@@ -79,7 +79,7 @@ const findAll = async () => {
   );
 
   // RESULT ENTREGA UM ARR DE OBJ COM MUITA INFORMAÇÃO. AQUI TIRO SÓ O QUE ME INTERESSA
-  // EM OUTRAS CHAMADAS NÃO PRECISEI FAZER ISSO, SÓ AQUI. VERIFICAR!
+  // EM OUTRAS CHAMADAS NÃO PRECISEI FAZER ISSO, SÓ AQUI. VERIFICAR PQ!
   const users = result.map((user) => user.dataValues);
 
   return users;
