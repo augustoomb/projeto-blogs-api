@@ -28,4 +28,10 @@ const register = async (req, res, next) => {
   return res.status(201).json({ token });
 };
 
-module.exports = { login, register };
+const findAll = async (_req, res) => {
+  const users = await userService.findAll();
+
+  return res.status(200).json(users);
+};
+
+module.exports = { login, register, findAll };

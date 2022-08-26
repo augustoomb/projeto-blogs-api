@@ -6,6 +6,7 @@ const { schemaLoginEmail, schemaLoginPassword, schemaDisplayNameRegister, schema
 
 const jwtTokenHelpers = require('../helpers/jwtTokenHelpers');
 
+// USO INTERNO
 const mountObjError = (statusCode, messageStr) => ({  
   error: {
     status: statusCode,
@@ -72,4 +73,15 @@ const register = async (displayName, email, password, image) => {
   return true;
 };
 
-module.exports = { userLoginIsValid, login, userRegisterIsValid, register };
+const findAll = async () => {
+  const result = await User.findAll(
+    { attributes: { exclude: ['password'] } },
+  );
+
+  // RESULT ENTREGA UM ARR DE OBJ COM MUITA INFORMAÇÃO. AQUI TIRO SÓ O QUE ME INTERESSA
+  const users = result.map((user) => user.dataValues);
+
+  return users;
+};
+
+module.exports = { userLoginIsValid, login, userRegisterIsValid, register, findAll };
