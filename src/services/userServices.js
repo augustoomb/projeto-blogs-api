@@ -97,4 +97,17 @@ const findByPk = async (id) => {
   return result[0];
 };
 
-module.exports = { userLoginIsValid, login, userRegisterIsValid, register, findAll, findByPk };
+// AO INFORMAR O E-MAIL, RECEBER O ID DO USUÁRIO
+const getIdByEmail = (email) => {
+  const user = User.findOne({ where: { email } });
+  return user;
+};
+
+module.exports = { userLoginIsValid,
+  login,
+  userRegisterIsValid,
+  register,
+  findAll,
+  findByPk,
+  getIdByEmail,
+};

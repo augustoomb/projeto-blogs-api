@@ -2,6 +2,7 @@ const express = require('express');
 
 const userController = require('./controllers/user');
 const categoryController = require('./controllers/category');
+const blogPostController = require('./controllers/blogPost');
 
 const errorMiddleware = require('./middlewares/error');
 
@@ -20,6 +21,9 @@ app.get('/user/:id', authValidation.auth, userController.findByPk);
 // ROTAS: CATEGORIES
 app.post('/categories', authValidation.auth, categoryController.create);
 app.get('/categories', authValidation.auth, categoryController.findAll);
+
+// ROTAS: BLOGPOST 
+app.post('/post', authValidation.auth, blogPostController.create);
 
 app.use(errorMiddleware);
 
