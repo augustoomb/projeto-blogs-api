@@ -27,4 +27,12 @@ const createCategory = async (name) => {
   return result;
 };
 
-module.exports = { createCategory };
+const findAll = async () => {
+  const result = await Category.findAll();
+
+  // const categories = result.map((category) => category.dataValues);
+
+  return result;
+};
+
+module.exports = { createCategory, findAll };
