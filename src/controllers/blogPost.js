@@ -1,5 +1,6 @@
 const blogPostServices = require('../services/blogPostServices');
 const userServices = require('../services/userServices');
+const categoryServices = require('../services/categoryServices');
 
 const create = async (req, res, next) => {
   const { title, content, categoryIds } = req.body;
@@ -9,9 +10,13 @@ const create = async (req, res, next) => {
   const checkPost = await blogPostServices.checkPostsInfo(title, content, categoryIds);
   if (checkPost.error) return next(checkPost.error);
 
-  // DESCOBRINDO ID DO USUÁRIO LOGADO
+  // CHECANDO SE OS TODOS IDs DE CATEGORIA FORNECIDOS EXISTEM NO BANCO
+  const allIdsInDb = await categoryServices.findAllId(categoryIds);
+  if (allIdsInDb.error) return next(allIdsInDb.error);
+  // return res.status(200).json(allIdsInDb);
+
+  // DESCOBRINDO ID DO USUÁRIO LOGADO (não preciso checar. Se chegou aqui tem token valido)
   const { id } = await userServices.getIdByEmail(email); // ID USUÁRIO LOGADO
-  return res.status(200).json({ id });
 };
 
 module.exports = { create };
