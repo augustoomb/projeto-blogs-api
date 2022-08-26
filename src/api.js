@@ -13,6 +13,7 @@ app.use(express.json());
 app.post('/login', userController.login);
 app.post('/user', userController.register);
 app.get('/user', authValidation.auth, userController.findAll);
+app.get('/user/:id', authValidation.auth, userController.findByPk);
 
 app.use(errorMiddleware);
 

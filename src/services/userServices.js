@@ -79,9 +79,22 @@ const findAll = async () => {
   );
 
   // RESULT ENTREGA UM ARR DE OBJ COM MUITA INFORMAÇÃO. AQUI TIRO SÓ O QUE ME INTERESSA
+  // EM OUTRAS CHAMADAS NÃO PRECISEI FAZER ISSO, SÓ AQUI. VERIFICAR!
   const users = result.map((user) => user.dataValues);
 
   return users;
 };
 
-module.exports = { userLoginIsValid, login, userRegisterIsValid, register, findAll };
+const findByPk = async (id) => {
+  const result = await User.findAll(
+    { attributes: { exclude: ['password'] }, where: { id } },
+  );
+
+  if (result.length === 0) {
+    return mountObjError(404, 'User does not exist');
+  }
+
+  return result[0];
+};
+
+module.exports = { userLoginIsValid, login, userRegisterIsValid, register, findAll, findByPk };
