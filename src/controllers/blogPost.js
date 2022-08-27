@@ -1,6 +1,7 @@
 const blogPostServices = require('../services/blogPostServices');
 const userServices = require('../services/userServices');
 const categoryServices = require('../services/categoryServices');
+const postCategoryServices = require('../services/postCategoryServices');
 
 const create = async (req, res, next) => {
   const { title, content, categoryIds } = req.body;
@@ -22,15 +23,23 @@ const create = async (req, res, next) => {
   const createdPost = await blogPostServices.create(title, content, id);
   if (createdPost.error) return next(createdPost.error);
 
+  // USAR O postId GERADO NA ÚLTIMA AÇÃO + OS categoryIds PASSADOS E INSERIR NA TABLE postCategories
+  categoryIds.forEach(async (categoryId) => {
+    const createdCategoryId = await postCategoryServices.createPostCategory(
+      createdPost.id, categoryId,
+    );
+    console.log(createdCategoryId);
+  });
+
   return res.status(201).json(createdPost);
 };
 
 module.exports = { create };
 
-// (FEITO) LANÇAR title e content passados no body + userId que peguei no auth, na table blogPost
+// (FEITO) Lançar title e content passados no body + userId que peguei no auth, na table blogPost
 
-// Pegar o id da ultima ação (idPost)
+// (FEITO) Pegar o postId gerado na ultima ação
 
-// Pegar cada CategoryId passado por param
+// (FEITO) Pegar CADA CategoryId passado por param
 
 // lançar os 2 últimos passos na table postCategories

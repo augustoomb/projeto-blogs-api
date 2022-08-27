@@ -25,21 +25,13 @@ const checkPostsInfo = (title, content, categoryIds) => {
   return true;
 };
 
-// // AO INFORMAR O E-MAIL, RECEBER O ID DO USUÁRIO
-// const getIdByEmail = (email) => {
-//   const user = User.findOne({ where: { email } });
-//   return user;
-// };
-
 const create = async (title, content, userId) => {
   const published = new Date();
   const updated = new Date();
   const result = await BlogPost.create({ title, content, userId, published, updated });
 
-  console.log(result);
-
   if (!result) {
-    return mountObjError(500, 'Não foi possível criar usuário');
+    return mountObjError(500, 'Não foi possível criar blogPost');
   }
 
   return result;
