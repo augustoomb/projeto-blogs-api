@@ -37,7 +37,7 @@ const create = async (title, content, userId) => {
   return result;
 };
 
-const getAll = async () => {
+const findAll = async () => {
   const result = await BlogPost.findAll({
     include: [{
       model: User, as: 'user', attributes: { exclude: ['password'] },
@@ -47,4 +47,19 @@ const getAll = async () => {
   return result;
 };
 
-module.exports = { checkPostsInfo, create, getAll };
+const findById = async (id) => {
+  const result = await BlogPost.findOne({
+    where: { id },
+    include: [{
+      model: User, as: 'user', attributes: { exclude: ['password'] },
+    }, { model: Category, as: 'categories', through: { attributes: [] } }],
+  });
+
+  if (!result) {
+    return mountObjError(404, 'Post does not exist');
+  }
+
+  return result;
+};
+
+module.exports = { checkPostsInfo, create, findAll, findById };

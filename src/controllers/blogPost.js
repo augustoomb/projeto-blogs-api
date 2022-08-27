@@ -35,12 +35,21 @@ const create = async (req, res, next) => {
 };
 
 const findAll = async (_req, res) => {
-  const blogPosts = await blogPostServices.getAll();
+  const blogPosts = await blogPostServices.findAll();
 
   return res.status(200).json(blogPosts);
 };
 
-module.exports = { create, findAll };
+const findById = async (req, res, next) => {
+  const { id } = req.params;
+
+  const blogPost = await blogPostServices.findById(id);
+  if (blogPost.error) return next(blogPost.error);
+
+  return res.status(200).json(blogPost);
+};
+
+module.exports = { create, findAll, findById };
 
 // PASSOS CREATE:
 
