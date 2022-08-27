@@ -36,6 +36,8 @@ const create = async (title, content, userId) => {
   const updated = new Date();
   const result = await BlogPost.create({ title, content, userId, published, updated });
 
+  console.log(result);
+
   if (!result) {
     return mountObjError(500, 'Não foi possível criar usuário');
   }

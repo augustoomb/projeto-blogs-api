@@ -27,10 +27,10 @@ const create = async (req, res, next) => {
 
 module.exports = { create };
 
-// (FEITO) LANÇAR title, content passados no body + userId que peguei no auth, na table blogPost
+// (FEITO) LANÇAR title e content passados no body + userId que peguei no auth, na table blogPost
 
 // Pegar o id da ultima ação (idPost)
 
 // Pegar cada CategoryId passado por param
 
-// lançar os 2 últimos na table postCategories
+// lançar os 2 últimos passos na table postCategories
