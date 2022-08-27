@@ -26,7 +26,9 @@ app.get('/categories', authValidation.auth, categoryController.findAll);
 app.post('/post', authValidation.auth, blogPostController.create);
 app.get('/post', authValidation.auth, blogPostController.findAll);
 app.get('/post/:id', authValidation.auth, blogPostController.findById);
+app.put('/post/:id', authValidation.auth, blogPostController.update);
 
+// ERROS RETORNADOS COM next(argumento) DENTRO DOS CONTROLLERS VEM DIRETO PRA CÁ ...
 app.use(errorMiddleware);
 
 // É importante exportar a constante `app`,

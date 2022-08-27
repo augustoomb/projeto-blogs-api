@@ -49,7 +49,34 @@ const findById = async (req, res, next) => {
   return res.status(200).json(blogPost);
 };
 
-module.exports = { create, findAll, findById };
+const update = async (req, res, next) => {
+  const { id } = req.params; // id do blogPost
+  const { title, content } = req.body; // conteúdo do blogPost
+  const { email } = req; // veio do auth token - é o email do usuário logado
+
+  // VALIDANDO OS DADOS DE BLOGPOST INFORMADOS NO BODY
+  const checkPost = await blogPostServices.checkPostUpdateInfo(title, content);
+  if (checkPost.error) return next(checkPost.error);
+
+  // VERIFICANDO SE O id DE blogPost PASSADO VIA PARAMS É VÁLIDO NO BANCO
+  const postExists = await blogPostServices.findById(id);
+  if (postExists.error) return next(postExists.error);
+
+  // DESCOBRINDO ID DO USUÁRIO LOGADO (não preciso checar(if). Se chegou aqui tem token válido)
+  const loggedUser = await userServices.getIdByEmail(email); // OBJ USUÁRIO LOGADO (loggedUser.id é o id)
+
+  // CHECANDO SE O USUÁRIO CADASTRADO NO POST É O MESMO USUÁRIO QUE ESTÁ LOGADO
+  const userAuthorized = await blogPostServices.loggedUserIsAuthorized(loggedUser, postExists);
+  if (userAuthorized.error) return next(userAuthorized.error);
+
+  // ATUALIZANDO A TABELA blogPost
+  const updatedPost = await blogPostServices.update(id, title, content);
+  if (updatedPost.error) return next(updatedPost.error);
+
+  return res.status(200).json(updatedPost);
+};
+
+module.exports = { create, findAll, findById, update };
 
 // PASSOS CREATE:
 
@@ -60,3 +87,17 @@ module.exports = { create, findAll, findById };
   // (FEITO) Pegar CADA CategoryId passado por param
 
   // (FEITO) lançar os 2 últimos passos na table postCategories
+
+// -----------------
+
+// PASSOS UPDATE:
+
+  // (FEITO) Testar se title e content foram enviados (não estão em branco - joi)
+
+  // (FEITO) Testar se id de blogPost passado é valido (checar se existe no banco)
+
+  // (FEITO) Buscar através da autenticação (auth e token) qual usuário enviou
+
+  // (FEITO) Pegar o usuário passado no passo 3 e comparar se ele é dono do blogPost que está no banco
+
+  // Atualizar title e content na tabela blogPosts
