@@ -24,6 +24,7 @@ app.get('/categories', authValidation.auth, categoryController.findAll);
 
 // ROTAS: BLOGPOST 
 app.post('/post', authValidation.auth, blogPostController.create);
+app.get('/post', authValidation.auth, blogPostController.findAll);
 
 app.use(errorMiddleware);
 

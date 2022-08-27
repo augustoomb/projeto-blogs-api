@@ -36,7 +36,7 @@ const findAll = async () => {
   return result;
 };
 
-// SIMILAR AO findAll, MAS BUSCA APENAS ELEMENTOS QUE TENHAM ID IGUAL A UM DOS ITENS DO ARR
+// SIMILAR AO findAll, MAS BUSCA APENAS ELEMENTOS QUE TENHAM ID IGUAL A UM DOS ITENS DO ARR categoryIds
 const findAllId = async (categoryIds) => {
   const result = await Category.findAll({
     where: {

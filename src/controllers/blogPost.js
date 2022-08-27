@@ -16,14 +16,14 @@ const create = async (req, res, next) => {
   if (allIdsInDb.error) return next(allIdsInDb.error);
   // return res.status(200).json(allIdsInDb);
 
-  // DESCOBRINDO ID DO USUÁRIO LOGADO (não preciso checar. Se chegou aqui tem token válido)
+  // DESCOBRINDO ID DO USUÁRIO LOGADO (não preciso checar(if). Se chegou aqui tem token válido)
   const { id } = await userServices.getIdByEmail(email); // ID USUÁRIO LOGADO
 
   // SALVAR NA TABLE blogposts title, content + userId QUE PEGUEI NO auth (middleware)
   const createdPost = await blogPostServices.create(title, content, id);
   if (createdPost.error) return next(createdPost.error);
 
-  // USAR O postId GERADO NA ÚLTIMA AÇÃO + OS categoryIds PASSADOS E INSERIR NA TABLE postCategories
+  // USAR O postId GERADO NA ÚLTIMA AÇÃO + OS categoryIds(array) PASSADOS E INSERIR NA TABLE postCategories
   categoryIds.forEach(async (categoryId) => {
     const createdCategoryId = await postCategoryServices.createPostCategory(
       createdPost.id, categoryId,
@@ -34,12 +34,20 @@ const create = async (req, res, next) => {
   return res.status(201).json(createdPost);
 };
 
-module.exports = { create };
+const findAll = async (_req, res) => {
+  const blogPosts = await blogPostServices.getAll();
 
-// (FEITO) Lançar title e content passados no body + userId que peguei no auth, na table blogPost
+  return res.status(200).json(blogPosts);
+};
 
-// (FEITO) Pegar o postId gerado na ultima ação
+module.exports = { create, findAll };
 
-// (FEITO) Pegar CADA CategoryId passado por param
+// PASSOS CREATE:
 
-// lançar os 2 últimos passos na table postCategories
+  // (FEITO) Lançar title e content passados no body + userId que peguei no auth, na table blogPost
+
+  // (FEITO) Pegar o postId gerado na última ação
+
+  // (FEITO) Pegar CADA CategoryId passado por param
+
+  // (FEITO) lançar os 2 últimos passos na table postCategories
