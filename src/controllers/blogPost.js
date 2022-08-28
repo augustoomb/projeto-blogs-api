@@ -65,7 +65,7 @@ const update = async (req, res, next) => {
   // DESCOBRINDO ID DO USUÁRIO LOGADO (não preciso checar(if). Se chegou aqui tem token válido)
   const loggedUser = await userServices.getIdByEmail(email); // OBJ USUÁRIO LOGADO (loggedUser.id é o id)
 
-  // CHECANDO SE O USUÁRIO CADASTRADO NO POST É O MESMO USUÁRIO QUE ESTÁ LOGADO
+  // CHECANDO SE O USUÁRIO CADASTRADO NO blogPost EM QUESTÃO É O MESMO USUÁRIO QUE ESTÁ LOGADO
   const userAuthorized = await blogPostServices.loggedUserIsAuthorized(loggedUser, postExists);
   if (userAuthorized.error) return next(userAuthorized.error);
 
@@ -76,7 +76,29 @@ const update = async (req, res, next) => {
   return res.status(200).json(updatedPost);
 };
 
-module.exports = { create, findAll, findById, update };
+const deletePost = async (req, res, next) => {
+  const { id } = req.params; // id do blogPost
+  const { email } = req; // veio do auth token - é o email do usuário logado
+
+  // VERIFICANDO SE O id DE blogPost PASSADO VIA PARAMS É VÁLIDO NO BANCO
+  const postExists = await blogPostServices.findById(id);
+  if (postExists.error) return next(postExists.error);
+
+  // DESCOBRINDO ID DO USUÁRIO LOGADO
+  const loggedUser = await userServices.getIdByEmail(email); // OBJ USUÁRIO LOGADO (loggedUser.id é o id)
+
+  // CHECANDO SE O USUÁRIO CADASTRADO NO blogPost EM QUESTÃO É O MESMO USUÁRIO QUE ESTÁ LOGADO
+  const userAuthorized = await blogPostServices.loggedUserIsAuthorized(loggedUser, postExists);
+  if (userAuthorized.error) return next(userAuthorized.error);
+
+  // APAGANDO O BLOGPOST
+  const deletedPost = await blogPostServices.deletePost(id);
+  if (deletedPost.error) return next(deletedPost.error); // erro caso o blogPost não seja encontrado no banco
+
+  return res.status(204).end();
+};
+
+module.exports = { create, findAll, findById, update, deletePost };
 
 // PASSOS CREATE:
 
@@ -100,4 +122,4 @@ module.exports = { create, findAll, findById, update };
 
   // (FEITO) Pegar o usuário passado no passo 3 e comparar se ele é dono do blogPost que está no banco
 
-  // Atualizar title e content na tabela blogPosts
+  // (FEITO) Atualizar title e content na tabela blogPosts

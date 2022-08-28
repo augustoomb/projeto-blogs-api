@@ -27,6 +27,7 @@ app.post('/post', authValidation.auth, blogPostController.create);
 app.get('/post', authValidation.auth, blogPostController.findAll);
 app.get('/post/:id', authValidation.auth, blogPostController.findById);
 app.put('/post/:id', authValidation.auth, blogPostController.update);
+app.delete('/post/:id', authValidation.auth, blogPostController.deletePost);
 
 // ERROS RETORNADOS COM next(argumento) DENTRO DOS CONTROLLERS VEM DIRETO PRA CÁ ...
 app.use(errorMiddleware);

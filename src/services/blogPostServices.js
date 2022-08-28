@@ -107,6 +107,19 @@ const update = async (id, title, content) => {
   return updatedBlogPost;
 };
 
+// DELETA blogPost ESPECÍFICO ATRÁVES DO id INFORMADO
+const deletePost = async (id) => {
+  const result = await BlogPost.destroy(
+    { where: { id } },
+  );
+
+  if (result === 0) {
+    return mountObjError(404, 'Post does not exist');
+  }
+
+  return result; // se delete ocorreu normalmente, resposta será 1
+};
+
 module.exports = {
   checkPostsInfo,
   create,
@@ -115,4 +128,5 @@ module.exports = {
   update,
   checkPostUpdateInfo,
   loggedUserIsAuthorized,
+  deletePost,
 };
