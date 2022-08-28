@@ -103,6 +103,19 @@ const getIdByEmail = (email) => {
   return user;
 };
 
+// DELETE O USUÁRIO INFORMADO
+const deleteUser = async (email) => {
+  const result = await User.destroy(
+    { where: { email } },
+  );
+
+  if (result === 0) {
+    return mountObjError(404, 'User does not exist');
+  }
+
+  return result; // se delete ocorreu normalmente, resposta será 1
+};
+
 module.exports = { userLoginIsValid,
   login,
   userRegisterIsValid,
@@ -110,4 +123,5 @@ module.exports = { userLoginIsValid,
   findAll,
   findByPk,
   getIdByEmail,
+  deleteUser,
 };

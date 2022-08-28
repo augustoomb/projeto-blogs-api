@@ -43,4 +43,13 @@ const findByPk = async (req, res, next) => {
   return res.status(200).json(user);
 };
 
-module.exports = { login, register, findAll, findByPk };
+const deleteUser = async (req, res, next) => {
+  const { email } = req; // veio do auth token
+
+  const userDeleted = await userService.deleteUser(email);
+  if (userDeleted.error) return next(userDeleted.error);
+
+  return res.status(204).end();
+};
+
+module.exports = { login, register, findAll, findByPk, deleteUser };

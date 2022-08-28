@@ -17,6 +17,7 @@ app.post('/login', userController.login);
 app.post('/user', userController.register);
 app.get('/user', authValidation.auth, userController.findAll);
 app.get('/user/:id', authValidation.auth, userController.findByPk);
+app.delete('/user/me', authValidation.auth, userController.deleteUser); // deleta meu usuário
 
 // ROTAS: CATEGORIES
 app.post('/categories', authValidation.auth, categoryController.create);
