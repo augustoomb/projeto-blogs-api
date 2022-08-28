@@ -24,6 +24,7 @@ app.post('/categories', authValidation.auth, categoryController.create);
 app.get('/categories', authValidation.auth, categoryController.findAll);
 
 // ROTAS: BLOGPOST 
+app.get('/post/search', authValidation.auth, blogPostController.searchByTerm); // busca por termo
 app.post('/post', authValidation.auth, blogPostController.create);
 app.get('/post', authValidation.auth, blogPostController.findAll);
 app.get('/post/:id', authValidation.auth, blogPostController.findById);

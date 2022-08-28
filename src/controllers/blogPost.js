@@ -98,7 +98,15 @@ const deletePost = async (req, res, next) => {
   return res.status(204).end();
 };
 
-module.exports = { create, findAll, findById, update, deletePost };
+const searchByTerm = async (req, res, _next) => {
+  const { q } = req.query;
+
+  const blogPosts = await blogPostServices.searchByTerm(q);
+
+  return res.status(200).json(blogPosts);
+};
+
+module.exports = { create, findAll, findById, update, deletePost, searchByTerm };
 
 // PASSOS CREATE:
 

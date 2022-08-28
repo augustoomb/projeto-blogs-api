@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+
 const { BlogPost, User, Category } = require('../database/models');
 
 const blogPostValidations = require('../helpers/blogPostValidations');
@@ -120,6 +122,23 @@ const deletePost = async (id) => {
   return result; // se delete ocorreu normalmente, resposta será 1
 };
 
+// BUSCAR blogPost (title ou content) POR UM TERMO ESPECÍFICO INFORMADO
+const searchByTerm = async (term) => {
+  const result = await BlogPost.findAll({
+    include: [{
+      model: User, as: 'user', attributes: { exclude: ['password'] },
+    }, { model: Category, as: 'categories', through: { attributes: [] } }],
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${term}%` } },
+        { content: { [Op.like]: `%${term}%` } },
+      ],
+    },
+  });
+
+  return result;
+};
+
 module.exports = {
   checkPostsInfo,
   create,
@@ -129,4 +148,30 @@ module.exports = {
   checkPostUpdateInfo,
   loggedUserIsAuthorized,
   deletePost,
+  searchByTerm,
 };
+
+// EXPLICANDO O searchByTerm
+
+/*
+
+dentro do findAll, dentro do include, incluo os dois relacionamentos para que no retorno eu tenha
+os dados completos, com informações de todas as tabelas.
+
+dentro do where, uso Op.or para especificar que quando qualquer uma das situações descritas dentro do 
+arr for atendida, dar um match e trazer o resultado para mim. O 'or' especificamente tem a função de OU
+usado normalmente. Poderia usar AND por ex, para exigir que ambas as condições do arr fossem cumpridas.
+
+Dentro do arr, criei 2 condições de busca:
+
+  1ª) a coluna title da tabela blogPosts, deve conter o termo passado via parametro.
+  O like igual do sql é usado para definir que quero esse termo.
+  Usei também o % antes e depois do termo, para especificar que pode haver palavras/trechos antes
+    e depois do termo buscado.
+
+  2ª) igual a primeira condição, mas buscando na coluna content.
+
+FONTES: 
+https://stackoverflow.com/questions/31258158/how-to-implement-search-feature-using-sequelizejs
+https://sequelize.org/docs/v6/core-concepts/model-querying-basics/
+*/
