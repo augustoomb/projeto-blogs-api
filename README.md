@@ -18,6 +18,13 @@
 
 <br />
 
+<details>
+  <summary><strong>Desempenho no projeto</strong></summary><br />
+  
+  <img src="blog-api-result.png" width="800px" >
+
+</details>
+
 # Orientações
 
 <details>
